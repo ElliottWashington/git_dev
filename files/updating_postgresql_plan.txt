@@ -1,0 +1,40 @@
+1. Backup your database: Before upgrading, it is essential to create a backup of your existing database to prevent data loss in case anything goes wrong during the upgrade process. Use the pg_dump tool to backup your database. For example, you can run the following command to backup a database named mydb:
+Copy code:
+
+		pg_dump -U postgres mydb > mydb_backup.sql
+
+2. Stop the PostgreSQL service: Before starting the upgrade process, you must stop the PostgreSQL service. Run the following command to stop the PostgreSQL service:
+
+		sudo systemctl stop postgresql
+
+3. Add PostgreSQL 12 repository: Add the PostgreSQL 12 repository to your system. To do this, you can create a new file in the /etc/apt/sources.list.d/ directory. Run the following command to create a new file named pgdg.list:
+
+		echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+
+4. Import the PostgreSQL signing key: Import the PostgreSQL signing key to your system using the following command:
+
+		wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+5. Update the package list: Update the package list to retrieve the latest packages from the PostgreSQL repository. Run the following command:
+
+		sudo apt-get update
+
+6. Install PostgreSQL 12: Now you can install PostgreSQL 12 using the following command:
+
+		sudo apt-get install postgresql-12
+
+7. Upgrade PostgreSQL cluster: Once PostgreSQL 12 is installed, you need to upgrade your existing PostgreSQL 10 cluster to version 12. Use the pg_upgrade tool to do this. Run the following command to start the upgrade process:
+
+		sudo pg_upgradecluster 10 main
+
+	-Note that the above command assumes that the name of the cluster is main.
+
+8. Restart the PostgreSQL service: Once the upgrade process is completed successfully, restart the PostgreSQL service using the following command:
+
+		sudo systemctl start postgresql
+
+9. Verify the upgrade: To verify that the upgrade was successful, you can check the version of PostgreSQL using the following command:
+
+		psql -c "SELECT version();"
+	
+	- If the output shows version 12, it means that the upgrade was successful.			
